@@ -1326,7 +1326,7 @@
       <CollationName>utf8mb4_unicode_ci</CollationName>
     </schema>
     <schema id="511" parent="1" name="nz_db">
-      <LastIntrospectionLocalTimestamp>2024-05-09.11:11:18</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-05-09.18:55:35</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_unicode_ci</CollationName>
     </schema>
     <schema id="512" parent="1" name="sys">
@@ -1668,8 +1668,7 @@
     </column>
     <column id="584" parent="524" name="money">
       <DasType>int(11)|0s</DasType>
-      <DefaultExpression>0</DefaultExpression>
-      <NotNull>1</NotNull>
+      <DefaultExpression>500</DefaultExpression>
       <Position>16</Position>
     </column>
     <foreign-key id="585" parent="524" name="profiles__userid_fk">

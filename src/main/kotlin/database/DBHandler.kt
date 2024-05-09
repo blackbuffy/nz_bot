@@ -49,15 +49,24 @@ class DBHandler {
         }
     }
 
-    fun getBalance(userId: Long): Int {
+    fun getBalance(userId: Long): Int? {
         val sql = "SELECT money FROM profiles WHERE userid=?"
 
         getConnection().prepareStatement(sql).also {
             it.setLong(1, userId)
             it.executeQuery().also { rs ->
-                rs.next()
-                return rs.getInt(1)
+                return if (rs.next()) rs.getInt(1) else null
             }
+        }
+    }
+
+    fun changeBalance(userId: Long, value: Int) {
+        val sql = "UPDATE profiles SET money=? WHERE userid=?"
+
+        getConnection().prepareStatement(sql).also {
+            it.setInt(1, value)
+            it.setLong(2, userId)
+            it.executeUpdate()
         }
     }
 

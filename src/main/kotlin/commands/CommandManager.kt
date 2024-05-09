@@ -11,8 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.*
 class CommandManager : ListenerAdapter() {
     private val commands: MutableMap<String, Command> = HashMap()
     override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
-        val command = event.name
-        val cmd = commands[command]
+        val cmd = commands[event.name]
         cmd?.execute(event)
     }
 
@@ -29,6 +28,7 @@ class CommandManager : ListenerAdapter() {
         commands["разбан"] = UnbanCommand()
         commands["размут"] = UnmuteCommand()
         commands["режим"] = ModeCommand()
+        commands["баланс"] = BalanceCommand()
         val guildCommandList: MutableList<CommandData> = ArrayList()
         guildCommandList.add(createClearCommand())
         guildCommandList.add(createMuteCommand())
@@ -44,7 +44,27 @@ class CommandManager : ListenerAdapter() {
         guildCommandList.add(createProfileCommand())
         guildCommandList.add(createExpCommand())
         guildCommandList.add(createModeCommand())
+        guildCommandList.add(createBalanceCommand())
         event.guild.updateCommands().addCommands(guildCommandList).queue()
+    }
+
+    private fun createBalanceCommand(): SlashCommandData {
+        val getOptions = arrayOf(
+            OptionData(OptionType.USER, "пользователь", "Пользователь, чей баланс нужно посмотреть", false)
+        )
+        val changeOptions = arrayOf(
+            OptionData(OptionType.USER, "пользователь", "Пользователь, чей баланс нужно изменить", true),
+            OptionData(OptionType.INTEGER, "значение", "Значение на которое нужно изменить", true)
+        )
+
+        val subcommands = arrayOf(
+            SubcommandData("посмотреть", "Посмотреть баланс пользователя")
+                .addOptions(*getOptions),
+            SubcommandData("изменить", "Изменить баланс пользователя")
+                .addOptions(*changeOptions)
+        )
+        return Commands.slash("баланс", "Команды связанные с балансом")
+            .addSubcommands(*subcommands)
     }
 
     private fun createModeCommand(): SlashCommandData {
