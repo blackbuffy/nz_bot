@@ -5,6 +5,7 @@ import DB_NAME
 import DB_PASS
 import DB_PORT
 import DB_USER
+import RUBLE_SYMBOL
 import RU_LOCALE_MAP
 import database.handlers.armor.*
 import database.handlers.consumables.*
@@ -45,6 +46,18 @@ class DBHandler {
         getConnection().prepareStatement(sql).also {
             it.setString(1, userId.toString())
             it.executeUpdate()
+        }
+    }
+
+    fun getBalance(userId: Long): Int {
+        val sql = "SELECT money FROM profiles WHERE userid=?"
+
+        getConnection().prepareStatement(sql).also {
+            it.setLong(1, userId)
+            it.executeQuery().also { rs ->
+                rs.next()
+                return rs.getInt(1)
+            }
         }
     }
 
@@ -144,10 +157,10 @@ class DBHandler {
 
     fun getItemInfo(id: Int): Collection<String> {
         val typeMap = mapOf(
-            "броня" to Pair("SELECT * FROM armoritems WHERE itemid=?",
+            "броня" to Pair("SELECT * FROM armor WHERE itemid=?",
                 listOf("name", "rank", "price", "termo", "electro", "chemical", "radio", "psi", "absorption", "armor", "containers")),
             "оружие" to Pair("SELECT * FROM weapons WHERE weaponid=?",
-                listOf("id", "name", "firerate", "accuracy", "range", "flatness", "recoil", "ammo", "weight", "ammotype", "price", "rank", "type")),
+                listOf("name", "fire_rate", "accuracy", "range", "flatness", "recoil", "ammo", "weight", "ammo_type", "price", "rank", "type")),
             "провизия" to Pair("SELECT * FROM consumables WHERE conid=?",
                 listOf("name", "rad", "psi", "bio", "food", "thirst", "description"))
         )
@@ -169,7 +182,12 @@ class DBHandler {
         val finalReturnArray = mutableListOf<String>()
         if (resultSet2.next()) {
             fields.forEach { field ->
-                finalReturnArray.add("${RU_LOCALE_MAP[field]}: ${resultSet2.getString(field)}")
+                val value = if (field == "price") {
+                    "${resultSet2.getString(field)}$RUBLE_SYMBOL"
+                } else {
+                    resultSet2.getString(field)
+                }
+                finalReturnArray.add("${RU_LOCALE_MAP[field]}: $value")
             }
         }
 
@@ -443,15 +461,15 @@ class DBHandler {
                     listOf("false")
                 } else {
                     listOf("""
-                        **Имя:** ${rs.getString(1)},
-                        "**Возраст:** ${rs.getInt(3)}",
-                        "**Прозвище:** ${rs.getString(4)}",
-                        "**Ранг:** ${rs.getString(9)}",
-                        "**Репутация:** ${rs.getString(10)}",
-                        "**Фракция:** ${rs.getString(5)}",
-                        "**Биография:** ${rs.getString(6)}",
-                        "**Характер:** ${rs.getString(7)}",
-                        "**История:** ${rs.getString(8)}"
+                        **Имя:** ${rs.getString(2)},
+                        **Возраст:** ${rs.getInt(3)},
+                        **Прозвище:** ${rs.getString(4)},
+                        **Ранг:** ${rs.getString(9)},
+                        **Репутация:** ${rs.getString(10)},
+                        **Фракция:** ${rs.getString(5)},
+                        **Биография:** ${rs.getString(6)},
+                        **Характер:** ${rs.getString(7)},
+                        **История:** ${rs.getString(8)}
                     """.trimIndent())
                 }
             }

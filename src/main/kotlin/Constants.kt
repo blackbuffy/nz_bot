@@ -17,22 +17,24 @@ val RU_LOCALE_MAP = mapOf(
     "armor" to "Броня",
     "containers" to "Контейнеры",
     "id" to "Идентификатор",
-    "firerate" to "Скорострельность",
+    "fire_rate" to "Скорострельность",
     "accuracy" to "Точность",
     "range" to "Дальность",
     "flatness" to "Плоскостность",
     "recoil" to "Отдача",
     "ammo" to "Боезапас",
     "weight" to "Вес",
-    "ammotype" to "Тип боеприпасов",
+    "ammo_type" to "Тип боеприпасов",
     "rad" to "Радиация",
     "bio" to "Биозащита",
     "food" to "Питательность",
     "thirst" to "Утоление жажды",
-    "description" to "Описание"
+    "description" to "Описание",
+    "type" to "Тип"
 )
 const val DB_HOST = "localhost"
 const val DB_PORT = 3306
 const val DB_USER = "ghwu"
 const val DB_PASS = "94556132"
 const val DB_NAME = "nz_db"
+const val RUBLE_SYMBOL = '₽'

@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d0b161de-08ce-46c2-b68f-549bc603a1e3" name="Changes" comment="Пофикшены все баги&#10;Перенос на Kotlin&#10;Переход на MariaDB&#10;&#10;Время в MariaDB&#10;Рефакторинг кода&#10;Сокращение количества строк в файле DBHandler.kt в ~2 раза" />
+    <list default="true" id="d0b161de-08ce-46c2-b68f-549bc603a1e3" name="Changes" comment="Фикс бага с получением информации о предмете&#10;Добавление знака рубля к ценам&#10;Начал делать команду баланс">
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,23 +26,23 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$USER_HOME$/IdeaRepositories/nzbot" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "blackbuffy"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;blackbuffy&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/blackbuffy/nzbot.git",
-    "accountId": "e740098a-ad38-4d24-bb02-5a9f0e3ff1f1"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/blackbuffy/nz_bot.git&quot;,
+    &quot;accountId&quot;: &quot;e740098a-ad38-4d24-bb02-5a9f0e3ff1f1&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2fuyq6pyVT5VrW9kmrdA6x917Dg" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -51,7 +53,8 @@
   "keyToString": {
     "Gradle.Build nzbot.executor": "Run",
     "Kotlin.Bot.executor": "Run",
-    "Kotlin.BotKt.executor": "Run",
+    "Kotlin.BotKt.executor": "Profiler#1",
+    "Kotlin.Unnamed.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
@@ -88,6 +91,21 @@
       <recent name="database.handlers.consumables" />
     </key>
   </component>
+  <component name="RunManager">
+    <configuration name="Bot" type="JetRunConfigurationType">
+      <option name="MAIN_CLASS_NAME" value="BotKt" />
+      <module name="nzbot.main" />
+      <shortenClasspath name="NONE" />
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -116,8 +134,34 @@
       <workItem from="1714896967328" duration="4612000" />
       <workItem from="1714914042008" duration="11079000" />
       <workItem from="1715016461163" duration="1895000" />
-      <workItem from="1715088604398" duration="6970000" />
+      <workItem from="1715088604398" duration="7317000" />
+      <workItem from="1715252894996" duration="8242000" />
     </task>
+    <task id="LOCAL-00001" summary="Пофикшены все баги&#10;Перенос на Kotlin&#10;Переход на MariaDB&#10;&#10;Время в MariaDB&#10;Рефакторинг кода&#10;Сокращение количества строк в файле DBHandler.kt в ~2 раза">
+      <option name="closed" value="true" />
+      <created>1715095932140</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1715095932140</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Пофикшены все баги&#10;Перенос на Kotlin&#10;Переход на MariaDB&#10;&#10;Время в MariaDB&#10;Рефакторинг кода&#10;Сокращение количества строк в файле DBHandler.kt в ~2 раза">
+      <option name="closed" value="true" />
+      <created>1715096038492</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1715096038492</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Фикс бага с получением информации о предмете&#10;Добавление знака рубля к ценам&#10;Начал делать команду баланс">
+      <option name="closed" value="true" />
+      <created>1715265956536</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1715265956536</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -148,7 +192,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Пофикшены все баги&#10;Перенос на Kotlin&#10;Переход на MariaDB&#10;&#10;Время в MariaDB&#10;Рефакторинг кода&#10;Сокращение количества строк в файле DBHandler.kt в ~2 раза" />
-    <option name="LAST_COMMIT_MESSAGE" value="Пофикшены все баги&#10;Перенос на Kotlin&#10;Переход на MariaDB&#10;&#10;Время в MariaDB&#10;Рефакторинг кода&#10;Сокращение количества строк в файле DBHandler.kt в ~2 раза" />
+    <MESSAGE value="Фикс бага с получением информации о предмете&#10;Добавление знака рубля к ценам&#10;Начал делать команду баланс" />
+    <option name="LAST_COMMIT_MESSAGE" value="Фикс бага с получением информации о предмете&#10;Добавление знака рубля к ценам&#10;Начал делать команду баланс" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -1326,7 +1326,7 @@
       <CollationName>utf8mb4_unicode_ci</CollationName>
     </schema>
     <schema id="511" parent="1" name="nz_db">
-      <LastIntrospectionLocalTimestamp>2024-05-04.20:04:02</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-05-09.11:11:18</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_unicode_ci</CollationName>
     </schema>
     <schema id="512" parent="1" name="sys">
@@ -1666,194 +1666,200 @@
       <Position>15</Position>
       <CollationName>utf8mb4_bin</CollationName>
     </column>
-    <foreign-key id="584" parent="524" name="profiles__userid_fk">
+    <column id="584" parent="524" name="money">
+      <DasType>int(11)|0s</DasType>
+      <DefaultExpression>0</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>16</Position>
+    </column>
+    <foreign-key id="585" parent="524" name="profiles__userid_fk">
       <ColNames>userid</ColNames>
       <RefColNames>userid</RefColNames>
       <RefTableName>users</RefTableName>
     </foreign-key>
-    <index id="585" parent="524" name="profiles__userid_fk">
+    <index id="586" parent="524" name="profiles__userid_fk">
       <ColNames>userid</ColNames>
       <Type>btree</Type>
     </index>
-    <column id="586" parent="525" name="quest_itemid">
+    <column id="587" parent="525" name="quest_itemid">
       <DasType>int(11)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="587" parent="525" name="name">
+    <column id="588" parent="525" name="name">
       <DasType>char(100)|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="588" parent="525" name="description">
+    <column id="589" parent="525" name="description">
       <DasType>text|0s</DasType>
       <Position>3</Position>
     </column>
-    <index id="589" parent="525" name="PRIMARY">
+    <index id="590" parent="525" name="PRIMARY">
       <ColNames>quest_itemid</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="590" parent="525" name="PRIMARY">
+    <key id="591" parent="525" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="591" parent="526" name="ticketname">
+    <column id="592" parent="526" name="ticketname">
       <DasType>char(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="592" parent="526" name="creatorid">
+    <column id="593" parent="526" name="creatorid">
       <DasType>bigint(20)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="593" parent="526" name="panel">
+    <column id="594" parent="526" name="panel">
       <DasType>char(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="594" parent="526" name="adminid">
+    <column id="595" parent="526" name="adminid">
       <DasType>bigint(20)|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="595" parent="526" name="closed">
+    <column id="596" parent="526" name="closed">
       <DasType>tinyint(1)|0s</DasType>
       <DefaultExpression>0</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>5</Position>
     </column>
-    <column id="596" parent="526" name="channelid">
+    <column id="597" parent="526" name="channelid">
       <DasType>bigint(20)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>6</Position>
     </column>
-    <index id="597" parent="526" name="PRIMARY">
+    <index id="598" parent="526" name="PRIMARY">
       <ColNames>ticketname</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="598" parent="526" name="PRIMARY">
+    <key id="599" parent="526" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <check id="599" parent="527" name="armor">
+    <check id="600" parent="527" name="armor">
       <ColNames>armor</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Predicate>json_valid(`armor`)</Predicate>
     </check>
-    <check id="600" parent="527" name="consumables">
+    <check id="601" parent="527" name="consumables">
       <ColNames>consumables</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Predicate>json_valid(`consumables`)</Predicate>
     </check>
-    <check id="601" parent="527" name="weapons">
+    <check id="602" parent="527" name="weapons">
       <ColNames>weapons</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Predicate>json_valid(`weapons`)</Predicate>
     </check>
-    <column id="602" parent="527" name="userid">
+    <column id="603" parent="527" name="userid">
       <DasType>bigint(20)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="603" parent="527" name="command_mode">
+    <column id="604" parent="527" name="command_mode">
       <DasType>int(11)|0s</DasType>
       <DefaultExpression>0</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="604" parent="527" name="armor">
+    <column id="605" parent="527" name="armor">
       <DasType>longtext|0s</DasType>
       <DefaultExpression>json_array()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>3</Position>
       <CollationName>utf8mb4_bin</CollationName>
     </column>
-    <column id="605" parent="527" name="weapons">
+    <column id="606" parent="527" name="weapons">
       <DasType>longtext|0s</DasType>
       <DefaultExpression>json_array()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>4</Position>
       <CollationName>utf8mb4_bin</CollationName>
     </column>
-    <column id="606" parent="527" name="consumables">
+    <column id="607" parent="527" name="consumables">
       <DasType>longtext|0s</DasType>
       <DefaultExpression>json_array()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>5</Position>
       <CollationName>utf8mb4_bin</CollationName>
     </column>
-    <index id="607" parent="527" name="PRIMARY">
+    <index id="608" parent="527" name="PRIMARY">
       <ColNames>userid</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="608" parent="527" name="PRIMARY">
+    <key id="609" parent="527" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="609" parent="528" name="weaponid">
+    <column id="610" parent="528" name="weaponid">
       <DasType>int(11)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="610" parent="528" name="name">
+    <column id="611" parent="528" name="name">
       <DasType>char(100)|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="611" parent="528" name="fire_rate">
+    <column id="612" parent="528" name="fire_rate">
       <DasType>int(11)|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="612" parent="528" name="accuracy">
+    <column id="613" parent="528" name="accuracy">
       <DasType>double|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="613" parent="528" name="range">
+    <column id="614" parent="528" name="range">
       <DasType>int(11)|0s</DasType>
       <Position>5</Position>
     </column>
-    <column id="614" parent="528" name="flatness">
+    <column id="615" parent="528" name="flatness">
       <DasType>int(11)|0s</DasType>
       <Position>6</Position>
     </column>
-    <column id="615" parent="528" name="recoil">
+    <column id="616" parent="528" name="recoil">
       <DasType>double|0s</DasType>
       <Position>7</Position>
     </column>
-    <column id="616" parent="528" name="ammo">
+    <column id="617" parent="528" name="ammo">
       <DasType>int(11)|0s</DasType>
       <Position>8</Position>
     </column>
-    <column id="617" parent="528" name="weight">
+    <column id="618" parent="528" name="weight">
       <DasType>double|0s</DasType>
       <Position>9</Position>
     </column>
-    <column id="618" parent="528" name="ammo_type">
+    <column id="619" parent="528" name="ammo_type">
       <DasType>char(100)|0s</DasType>
       <Position>10</Position>
     </column>
-    <column id="619" parent="528" name="price">
+    <column id="620" parent="528" name="price">
       <DasType>int(11)|0s</DasType>
       <Position>11</Position>
     </column>
-    <column id="620" parent="528" name="rank">
+    <column id="621" parent="528" name="rank">
       <DasType>text|0s</DasType>
       <Position>12</Position>
     </column>
-    <column id="621" parent="528" name="type">
+    <column id="622" parent="528" name="type">
       <DasType>text|0s</DasType>
       <Position>13</Position>
     </column>
-    <index id="622" parent="528" name="PRIMARY">
+    <index id="623" parent="528" name="PRIMARY">
       <ColNames>weaponid</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="623" parent="528" name="PRIMARY">
+    <key id="624" parent="528" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>

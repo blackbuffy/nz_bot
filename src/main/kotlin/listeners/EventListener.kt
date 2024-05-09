@@ -37,10 +37,8 @@ class EventListener: ListenerAdapter() {
     override fun onUserUpdateOnlineStatus(event: UserUpdateOnlineStatusEvent) {
         val user = event.user
         val newStatus = event.newOnlineStatus
-        val ghwuTechAdminId = GHWU_MEMBER_ID
-        val paketovOwnerId = PAKETOV_MEMBER_ID
 
-        if (user.idLong == ghwuTechAdminId || user.idLong == paketovOwnerId) {
+        if (user.idLong == GHWU_MEMBER_ID || user.idLong == PAKETOV_MEMBER_ID) {
             val statusMessage = if (newStatus == OnlineStatus.ONLINE) "онлайн" else "оффлайн"
             val msg = "${user.globalName} $statusMessage!"
             event.guild.getTextChannelById(ADMIN_STATUS_CHANNEL_ID)!!.sendMessage(msg).queue()
