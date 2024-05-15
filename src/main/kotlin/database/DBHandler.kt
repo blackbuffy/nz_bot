@@ -18,6 +18,7 @@ import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Timestamp
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
@@ -45,6 +46,50 @@ class DBHandler {
 
         getConnection().prepareStatement(sql).also {
             it.setString(1, userId.toString())
+            it.executeUpdate()
+        }
+    }
+
+    fun checkDateForBonus(userId: Long): String {
+        val sql = "SELECT last_bonus_date FROM users where userid=?"
+
+        val dateTime: LocalDateTime
+        getConnection().prepareStatement(sql).executeQuery().also { rs ->
+            rs.next()
+            dateTime = rs.getTimestamp(1).toLocalDateTime()
+        }
+        val currentDateTIme = LocalDateTime.now()
+
+        return if (Duration.between(dateTime, currentDateTIme).toHours() >= 24) {
+            "true"
+        } else {
+            dateTime.plusHours(24).toString()
+        }
+    }
+
+    fun getBonusStreak(userid: Long): Int {
+        val sql = "SELECT bonus_streak FROM users WHERE userid=?"
+
+        getConnection().prepareStatement(sql).executeQuery().also { rs ->
+            rs.next()
+            return rs.getInt(1)
+        }
+    }
+
+    fun incrementBonusStreak(userid: Long) {
+        val sql = "UPDATE users SET bonus_streak=bonus_streak+1 WHERE userid=?"
+        getConnection().prepareStatement(sql).also {
+            it.setLong(1, userid)
+            it.executeUpdate()
+        }
+    }
+
+    fun setNewDateForBonus(userid: Long, dateTime: LocalDateTime) {
+        val sql = "UPDATE users SET last_bonus_date=? WHERE userid=?"
+
+        getConnection().prepareStatement(sql).also {
+            it.setTimestamp(1, Timestamp.valueOf(dateTime))
+            it.setLong(2, userid)
             it.executeUpdate()
         }
     }
