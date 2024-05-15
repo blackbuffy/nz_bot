@@ -45,7 +45,7 @@ class InventoryCommand : Command {
                     .asUser
             val userid = user.idLong
             val armorList: Array<String> = dbHandler.getUserArmor(userid)
-            for (armor in armorList!!) {
+            for (armor in armorList) {
                 sb.append(armor + "\n")
             }
             val armorFieldStr: String = if (sb.toString() == "\n") "Пусто" else sb.toString()

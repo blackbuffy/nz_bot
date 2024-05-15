@@ -7,7 +7,7 @@ class ArmorListReturnHandler {
         private val dbHandler = DBHandler()
 
         fun returnList(userId: Long): Array<String> {
-            return getListString(userId).replace("\"", "").replace("[", "").replace("]", "").split(", ".toRegex())
+            return if (getListString(userId) == "[]") arrayOf("") else getListString(userId).replace("\"", "").replace("[", "").replace("]", "").split(", ".toRegex())
                 .dropLastWhile { it.isEmpty() }
                 .toTypedArray()
         }
