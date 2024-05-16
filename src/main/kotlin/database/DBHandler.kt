@@ -50,13 +50,43 @@ class DBHandler {
         }
     }
 
+    fun giveBonus(userId: Long, modifier: Float, money: Int) {
+        val updateMoneySQL = "UPDATE profiles SET money=money+? WHERE userid=?"
+        getConnection().prepareStatement(updateMoneySQL).also {
+            it.setInt(1, money)
+            it.setLong(2, userId)
+            it.executeUpdate()
+        }
+
+        val updateModifiersSQL = "UPDATE users SET xp_modifiers=JSON_ARRAY_APPEND(xp_modifiers, '$', ?) WHERE userid=?"
+        getConnection().prepareStatement(updateModifiersSQL).also {
+            it.setFloat(1, modifier)
+            it.setLong(2, userId)
+            it.executeUpdate()
+        }
+    }
+
+    fun getBonus(day: Int): Map<String, Any> {
+        val sql = "SELECT (xp_modifier, money) FROM daily_bonuses WHERE day=?"
+        getConnection().prepareStatement(sql).also {
+            it.setInt(1, day)
+            it.executeQuery().also { rs ->
+                rs.next()
+                return mapOf(Pair("modifier", rs.getFloat("xp_modifier")), Pair("money", rs.getInt("money")))
+            }
+        }
+    }
+
     fun checkDateForBonus(userId: Long): String {
         val sql = "SELECT last_bonus_date FROM users where userid=?"
 
         val dateTime: LocalDateTime
-        getConnection().prepareStatement(sql).executeQuery().also { rs ->
-            rs.next()
-            dateTime = rs.getTimestamp(1).toLocalDateTime()
+        getConnection().prepareStatement(sql).also {
+            it.setLong(1, userId)
+            it.executeQuery().also { rs ->
+                rs.next()
+                dateTime = rs.getTimestamp(1).toLocalDateTime()
+            }
         }
         val currentDateTIme = LocalDateTime.now()
 
@@ -70,9 +100,12 @@ class DBHandler {
     fun getBonusStreak(userid: Long): Int {
         val sql = "SELECT bonus_streak FROM users WHERE userid=?"
 
-        getConnection().prepareStatement(sql).executeQuery().also { rs ->
-            rs.next()
-            return rs.getInt(1)
+        getConnection().prepareStatement(sql).also {
+            it.setLong(1, userid)
+            it.executeQuery().also { rs ->
+                rs.next()
+                return rs.getInt(1)
+            }
         }
     }
 
