@@ -50,6 +50,17 @@ class DBHandler {
         }
     }
 
+    fun createBonus(modifier: Float, money: Int, day: Int) {
+        val sql = "INSERT INTO daily_bonuses (day, xp_modifier, money) VALUES (?,?,?)"
+
+        getConnection().prepareStatement(sql).also {
+            it.setInt(1, day)
+            it.setFloat(2, modifier)
+            it.setInt(3, money)
+            it.executeUpdate()
+        }
+    }
+
     fun giveBonus(userId: Long, modifier: Float, money: Int) {
         val updateMoneySQL = "UPDATE profiles SET money=money+? WHERE userid=?"
         getConnection().prepareStatement(updateMoneySQL).also {

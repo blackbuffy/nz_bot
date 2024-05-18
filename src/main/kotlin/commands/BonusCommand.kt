@@ -11,6 +11,35 @@ class BonusCommand: Command {
             "забрать" -> {
                 collectBonus(event)
             }
+            "создать" -> {
+                createBonus(event)
+            }
+        }
+    }
+
+    private fun createBonus(event: SlashCommandInteractionEvent) {
+        val dbHandler = DBHandler()
+        val roleIds: List<String> = dbHandler.getRoleIds("admin", 1).split(", ")
+        var res = false
+
+        mainLoop@ for (role in event.member!!.roles) {
+            for (roleId in roleIds) {
+                if (role.id == roleId) {
+                    val modifier = event.getOption("модификатор")!!.asDouble.toFloat()
+                    val day = event.getOption("день")!!.asInt
+                    val money = event.getOption("деньги")!!.asInt
+
+                    dbHandler.createBonus(modifier, money, day)
+                    event.reply("Добавлено").setEphemeral(true).queue()
+
+                    res = true
+                    break@mainLoop
+                }
+            }
+        }
+
+        if (!res) {
+            event.reply("У вас недостаточно прав").queue()
         }
     }
 

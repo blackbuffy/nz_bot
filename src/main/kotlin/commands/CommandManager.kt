@@ -1,5 +1,6 @@
 package commands
 
+import RUBLE_SYMBOL
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -29,7 +30,10 @@ class CommandManager : ListenerAdapter() {
         commands["размут"] = UnmuteCommand()
         commands["режим"] = ModeCommand()
         commands["баланс"] = BalanceCommand()
+        commands["бонус"] = BonusCommand()
+
         val guildCommandList: MutableList<CommandData> = ArrayList()
+
         guildCommandList.add(createClearCommand())
         guildCommandList.add(createMuteCommand())
         guildCommandList.add(createUnmuteCommand())
@@ -37,6 +41,7 @@ class CommandManager : ListenerAdapter() {
         guildCommandList.add(createKickCommand())
         guildCommandList.add(createBanCommand())
         guildCommandList.add(createUnbanCommand())
+        guildCommandList.add(createBonusCommand())
         // guildCommandList.add(Commands.slash("sendmsgtest", "test"));
         guildCommandList.add(createInventoryCommand())
         guildCommandList.add(createItemCommand())
@@ -46,6 +51,23 @@ class CommandManager : ListenerAdapter() {
         guildCommandList.add(createModeCommand())
         guildCommandList.add(createBalanceCommand())
         event.guild.updateCommands().addCommands(guildCommandList).queue()
+    }
+
+    private fun createBonusCommand(): SlashCommandData {
+        val createOptions = arrayOf(
+            OptionData(OptionType.NUMBER, "модификатор", "Модификатор XP", false),
+            OptionData(OptionType.INTEGER, "день", "День бонуса", true),
+            OptionData(OptionType.INTEGER, "деньги", "$RUBLE_SYMBOL", false)
+        )
+
+        val subcommands = arrayOf(
+            SubcommandData("забрать", "Забрать бонус"),
+            SubcommandData("создать", "Создать бонус")
+                .addOptions(*createOptions)
+        )
+
+        return Commands.slash("бонус", "Команды связанные с бонусами")
+            .addSubcommands(*subcommands)
     }
 
     private fun createBalanceCommand(): SlashCommandData {
