@@ -78,12 +78,16 @@ class DBHandler {
     }
 
     fun getBonus(day: Int): Map<String, Any> {
-        val sql = "SELECT (xp_modifier, money) FROM daily_bonuses WHERE day=?"
+        val sql = "SELECT xp_modifier, money FROM daily_bonuses WHERE day=?"
         getConnection().prepareStatement(sql).also {
             it.setInt(1, day)
             it.executeQuery().also { rs ->
-                rs.next()
-                return mapOf(Pair("modifier", rs.getFloat("xp_modifier")), Pair("money", rs.getInt("money")))
+                if (rs.next()) {
+                    return mapOf(Pair("modifier", rs.getFloat("xp_modifier")), Pair("money", rs.getInt("money")))
+                } else {
+                    print("ZZZZZZZZZZZZZZZZ")
+                    return mapOf()
+                }
             }
         }
     }

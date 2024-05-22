@@ -25,9 +25,9 @@ class BonusCommand: Command {
         mainLoop@ for (role in event.member!!.roles) {
             for (roleId in roleIds) {
                 if (role.id == roleId) {
-                    val modifier = event.getOption("модификатор")!!.asDouble.toFloat()
+                    val modifier = event.getOption("модификатор")?.asDouble?.toFloat() ?: 1.0f
                     val day = event.getOption("день")!!.asInt
-                    val money = event.getOption("деньги")!!.asInt
+                    val money = event.getOption("деньги")?.asInt ?: 0
 
                     dbHandler.createBonus(modifier, money, day)
                     event.reply("Добавлено").setEphemeral(true).queue()
@@ -71,7 +71,8 @@ class BonusCommand: Command {
         } else {
             val dateTime = LocalDateTime.parse(dbHandler.checkDateForBonus(userId))
             event.reply("Вы сможете забрать бонус не раньше, чем " +
-                    "${dateTime.dayOfMonth}.${dateTime.month}.${dateTime.year} ${dateTime.hour}:${dateTime.minute}.${dateTime.second}")
+                    "${dateTime.dayOfMonth.toString().padStart(2, '0')}.${dateTime.month.value.toString().padStart(2, '0')}.${dateTime.year} " +
+                    "${dateTime.hour.toString().padStart(2, '0')}:${dateTime.minute.toString().padStart(2, '0')}:${dateTime.second.toString().padStart(2, '0')}")
                 .queue()
         }
     }

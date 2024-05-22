@@ -55,8 +55,8 @@ class CommandManager : ListenerAdapter() {
 
     private fun createBonusCommand(): SlashCommandData {
         val createOptions = arrayOf(
-            OptionData(OptionType.NUMBER, "модификатор", "Модификатор XP", false),
             OptionData(OptionType.INTEGER, "день", "День бонуса", true),
+            OptionData(OptionType.NUMBER, "модификатор", "Модификатор XP", false),
             OptionData(OptionType.INTEGER, "деньги", "$RUBLE_SYMBOL", false)
         )
 
