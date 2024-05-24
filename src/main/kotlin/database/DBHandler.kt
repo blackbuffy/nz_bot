@@ -41,6 +41,45 @@ class DBHandler {
         return dataSource.connection
     }
 
+    fun useModificator(userId: Long) {
+        var sql = """
+            UPDATE users
+            SET active_xp_modifiers = JSON_ARRAY_APPEND(
+                active_xp_modifiers, '${'$'}',
+                JSON_EXTRACT(xp_modifiers, '${'$'}[*]')
+            ) WHERE userid=?
+        """
+        getConnection().prepareStatement(sql).also {
+            it.setLong(1, userId)
+            it.executeUpdate()
+        }
+
+        sql = "UPDATE users SET xp_modifiers = JSON_ARRAY(1.0) WHERE userid=?"
+        getConnection().prepareStatement(sql).also {
+            it.setLong(1, userId)
+            it.executeUpdate()
+        }
+    }
+
+    fun getModificator(userId: Long, status: Boolean): MutableList<Float> {
+        val str = if (status) "active_xp_modifiers" else "xp_modifiers"
+        val sql = "SELECT * FROM JSON_TABLE((SELECT $str FROM users WHERE userid=?), '$**[*]' COLUMNS(modifier double path '$')) AS jt"
+        val list = mutableListOf<Float>()
+
+        getConnection().prepareStatement(sql).also {
+            it.setLong(1, userId)
+            it.executeQuery().also { rs ->
+                while (rs.next()) {
+                    if (rs.getFloat(1) != 0.0f) {
+                        list.add(rs.getFloat("modifier"))
+                    }
+                }
+            }
+        }
+
+        return list
+    }
+
     fun signUpUser(userId: Long) {
         val sql = "INSERT INTO users (userid) VALUES (?)"
 

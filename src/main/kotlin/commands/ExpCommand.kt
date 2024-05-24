@@ -12,20 +12,78 @@ import java.awt.Color
 
 class ExpCommand : Command {
     override fun execute(event: SlashCommandInteractionEvent) {
-        when (event.subcommandName) {
-            "ранг" -> {
-                giveRankExp(event)
+        when (event.subcommandGroup) {
+            "модификатор" -> {
+                when (event.subcommandName) {
+                    "посмотреть" -> {
+                        getModificator(event)
+                    }
+                    "использовать" -> {
+                        useModificator(event)
+                    }
+                }
             }
-            "посмотреть" -> {
-                getExp(event)
-            }
-            "репутация" -> {
-                giveRepExp(event)
+            else -> {
+                when (event.subcommandName) {
+                    "ранг" -> {
+                        giveRankExp(event)
+                    }
+                    "посмотреть" -> {
+                        getExp(event)
+                    }
+                    "репутация" -> {
+                        giveRepExp(event)
+                    }
+                }
             }
         }
     }
 
     companion object {
+        fun useModificator(event: SlashCommandInteractionEvent) {
+            val dbHandler = DBHandler()
+
+            val user = event.user
+            dbHandler.useModificator(user.idLong)
+
+            var sum = 1.0
+            dbHandler.getModificator(user.idLong, true).forEach {
+                sum *= it
+            }
+
+            event.reply("Ваш новый модификатор: *x${String.format("%.2f", sum)}*").queue()
+        }
+
+        fun getModificator(event: SlashCommandInteractionEvent) {
+            val dbHandler = DBHandler()
+
+            val user = event.user
+            val status = event.getOption("активные")!!.asBoolean
+
+            val list = dbHandler.getModificator(user.idLong, status)
+            println(list.toString())
+            when (status) {
+                true -> {
+                    var sum = 1.0
+
+                    list.forEach {
+                        sum *= it
+                    }
+
+                    event.reply("Ваш активный модификатор на следующее задание: x*${String.format("%.2f", sum)}*").queue()
+                }
+                else -> {
+                    var sum = 1.0f
+
+                    list.forEach {
+                        sum *= it
+                    }
+
+                    event.reply("Ваш неактивный модификатор: x*${String.format("%.2f", sum)}*").queue()
+                }
+            }
+        }
+
         fun getExp(event: SlashCommandInteractionEvent) {
             val dbHandler = DBHandler()
             val eb = EmbedBuilder()

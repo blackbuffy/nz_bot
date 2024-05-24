@@ -197,8 +197,23 @@ class CommandManager : ListenerAdapter() {
             SubcommandData("посмотреть", "Посмотреть EXP пользователя")
                 .addOptions(*expGetSCOptions)
         )
+
+        val modificatorGetSCOptions = arrayOf(
+            OptionData(OptionType.BOOLEAN, "активные", "Какие модификаторы посмотреть", true)
+        )
+        val modificatorSubcommands = arrayOf(
+            SubcommandData("посмотреть", "Посмотреть модификатор")
+                .addOptions(*modificatorGetSCOptions),
+            SubcommandData("использовать", "Использовать неактивные модификаторы")
+        )
+        val modificatorGroup = arrayOf(
+            SubcommandGroupData("модификатор", "Команды модификаторов опыта")
+                .addSubcommands(*modificatorSubcommands)
+        )
+
         return Commands.slash("опыт", "Запретить участнику отправлять сообщения и говорить на время")
             .addSubcommands(*expSubcommands)
+            .addSubcommandGroups(*modificatorGroup)
     }
 
     private fun createProfileCommand(): SlashCommandData {
