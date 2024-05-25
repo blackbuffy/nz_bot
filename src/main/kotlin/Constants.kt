@@ -20,7 +20,7 @@ val RU_LOCALE_MAP = mapOf(
     "fire_rate" to "Скорострельность",
     "accuracy" to "Точность",
     "range" to "Дальность",
-    "flatness" to "Плоскостность",
+    "flatness" to "Настильность",
     "recoil" to "Отдача",
     "ammo" to "Боезапас",
     "weight" to "Вес",

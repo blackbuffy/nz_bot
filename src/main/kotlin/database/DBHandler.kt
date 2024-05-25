@@ -327,7 +327,7 @@ class DBHandler {
                 listOf("name", "rank", "price", "termo", "electro", "chemical", "radio", "psi", "absorption", "armor", "containers")),
             "оружие" to Pair("SELECT * FROM weapons WHERE weaponid=?",
                 listOf("name", "fire_rate", "accuracy", "range", "flatness", "recoil", "ammo", "weight", "ammo_type", "price", "rank", "type")),
-            "провизия" to Pair("SELECT * FROM consumables WHERE conid=?",
+            "расходник" to Pair("SELECT * FROM consumables WHERE conid=?",
                 listOf("name", "rad", "psi", "bio", "food", "thirst", "description"))
         )
 
@@ -353,7 +353,18 @@ class DBHandler {
                 } else {
                     resultSet2.getString(field)
                 }
-                finalReturnArray.add("${RU_LOCALE_MAP[field]}: $value")
+
+                when (field) {
+                    "bio" -> {
+                        finalReturnArray.add("Био: $value")
+                    }
+                    "psi" -> {
+                        finalReturnArray.add("Пси-излучение: $value")
+                    }
+                    else -> {
+                        finalReturnArray.add("${RU_LOCALE_MAP[field]}: $value")
+                    }
+                }
             }
         }
 

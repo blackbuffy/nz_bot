@@ -365,9 +365,9 @@ class CommandManager : ListenerAdapter() {
                 .addOptions(*itemAddWeaponSCOptions),
             SubcommandData("удалить_оружие", "Удалить оружие")
                 .addOptions(*itemRemoveWeaponSCOptions),
-            SubcommandData("добавить_провизию", "Создать съедобный предмет")
+            SubcommandData("добавить_расходник", "Создать съедобный предмет")
                 .addOptions(*itemAddConsumableSCOptions),
-            SubcommandData("удалить_провизию", "Удалить съедобный предмет")
+            SubcommandData("удалить_расходник", "Удалить съедобный предмет")
                 .addOptions(*itemRemoveConsumableSCOptions),
             SubcommandData("все", "Увидеть все предметы определенного типа")
                 .addOptions(*itemGetAllSCOptions),

@@ -61,11 +61,12 @@ class ConsumableAdditionHandler {
                 conid,
                 name, 
                 psi, 
+                rad,
                 bio, 
                 food, 
                 thirst, 
                 description
-            ) VALUES(?, ?, ?, ?, ?, ?, ?)
+            ) VALUES(?, ?, ?, ?, ?, ?, ?, ?)
             """.trimIndent()
             dbHandler.getConnection().prepareStatement(sql).also {
                 it.setInt(1, conId)
@@ -81,13 +82,14 @@ class ConsumableAdditionHandler {
         }
 
         private fun updateItemIDs(): Int {
-            val sql = """
-                UPDATE itemids SET lastid=lastid+1;
-                SELECT lastid FROM itemids
-            """.trimIndent()
-            dbHandler.getConnection().createStatement().also {
-                it.execute(sql)
-                it.resultSet.also { rs ->
+            var sql = "UPDATE itemids SET lastid=lastid+1"
+            dbHandler.getConnection().prepareStatement(sql).also {
+                it.executeUpdate()
+            }
+
+            sql = "SELECT lastid FROM itemids"
+            dbHandler.getConnection().prepareStatement(sql).also {
+                it.executeQuery().also { rs ->
                     rs.next()
                     return rs.getInt(1)
                 }

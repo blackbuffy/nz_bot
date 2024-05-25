@@ -24,10 +24,10 @@ class ItemCommand : Command {
             "удалить_оружие" -> {
                 deleteWeapon(event)
             }
-            "добавить_провизию" -> {
+            "добавить_расходник" -> {
                 createConsumable(event)
             }
-            "удалить_провизию" -> {
+            "удалить_расходник" -> {
                 deleteConsumable(event)
             }
             "все" -> {
