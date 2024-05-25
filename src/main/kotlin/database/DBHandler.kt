@@ -41,6 +41,31 @@ class DBHandler {
         return dataSource.connection
     }
 
+    fun applyModificatr(userId: Long): Float {
+        var sql = "SELECT * FROM JSON_TABLE((SELECT active_xp_modifiers FROM users WHERE userid=?), '$**[*]' COLUMNS(modifier double path '$')) AS jt"
+        val list = mutableListOf<Float>()
+        var sum = 1.0f
+        getConnection().prepareStatement(sql).also {
+            it.setLong(1, userId)
+            it.executeQuery().also { rs ->
+                while (rs.next()) {
+                    list.add(rs.getFloat(1))
+                }
+                list.forEach { el ->
+                    sum *= el
+                }
+            }
+        }
+
+        sql = "UPDATE users SET active_xp_modifiers=JSON_ARRAY(1.0) WHERE userid=?"
+        getConnection().prepareStatement(sql).also {
+            it.setLong(1, userId)
+            it.executeUpdate()
+        }
+
+        return sum
+    }
+
     fun useModificator(userId: Long) {
         var sql = """
             UPDATE users

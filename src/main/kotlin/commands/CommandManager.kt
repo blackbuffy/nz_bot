@@ -178,24 +178,20 @@ class CommandManager : ListenerAdapter() {
     }
 
     private fun createExpCommand(): SlashCommandData {
-        val expGiveRankSCOptions = arrayOf(
-            OptionData(OptionType.USER, "пользователь", "Пользователь, которому нужно выдать Rank EXP", true),
-            OptionData(OptionType.INTEGER, "exp", "Количество Rank EXP, которые нужно выдать", true)
-        )
-        val expGiveRepSCOptions = arrayOf(
-            OptionData(OptionType.USER, "пользователь", "Пользователь, которому нужно выдать Rep EXP", true),
-            OptionData(OptionType.INTEGER, "exp", "Количество Rep EXP, которое нужно выдать", true)
-        )
         val expGetSCOptions = arrayOf(
             OptionData(OptionType.USER, "пользователь", "Пользователь, EXP которого нужно посмотреть", false)
         )
+        val expGiveSCOptions = arrayOf(
+            OptionData(OptionType.USER, "пользователь", "Пользователь, кому выдать XP", true),
+            OptionData(OptionType.BOOLEAN, "модификатор", "Использовать ли модификатор", true),
+            OptionData(OptionType.INTEGER, "ранг", "Количество Rank XP", false),
+            OptionData(OptionType.INTEGER, "репутация", "Количество Rep XP", false)
+        )
         val expSubcommands = arrayOf(
-            SubcommandData("ранг", "Выдать Rank EXP пользователю")
-                .addOptions(*expGiveRankSCOptions),
-            SubcommandData("репутация", "Выдать Rep EXP пользователю")
-                .addOptions(*expGiveRepSCOptions),
-            SubcommandData("посмотреть", "Посмотреть EXP пользователя")
-                .addOptions(*expGetSCOptions)
+            SubcommandData("посмотреть", "Посмотреть XP пользователя")
+                .addOptions(*expGetSCOptions),
+            SubcommandData("выдать", "Выдать XP пользователю")
+                .addOptions(*expGiveSCOptions)
         )
 
         val modificatorGetSCOptions = arrayOf(

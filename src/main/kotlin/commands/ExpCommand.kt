@@ -25,14 +25,11 @@ class ExpCommand : Command {
             }
             else -> {
                 when (event.subcommandName) {
-                    "ранг" -> {
-                        giveRankExp(event)
-                    }
                     "посмотреть" -> {
                         getExp(event)
                     }
-                    "репутация" -> {
-                        giveRepExp(event)
+                    "выдать" -> {
+                        giveExp(event)
                     }
                 }
             }
@@ -61,7 +58,6 @@ class ExpCommand : Command {
             val status = event.getOption("активные")!!.asBoolean
 
             val list = dbHandler.getModificator(user.idLong, status)
-            println(list.toString())
             when (status) {
                 true -> {
                     var sum = 1.0
@@ -111,22 +107,90 @@ class ExpCommand : Command {
             }
         }
 
-        fun giveRepExp(event: SlashCommandInteractionEvent) {
+        fun giveExp(event: SlashCommandInteractionEvent) {
             val dbHandler = DBHandler()
             val roleIds: List<String> = dbHandler.getRoleIds("gm", 1).split(", ")
             var res = false
             mainLoop@ for (role in event.member!!.roles) {
                 for (roleId in roleIds) {
-                    if (roleId == role.id) {
-                        val user = event.getOption("пользователь")!!.asMember
-                        val xp: Int = event.getOption("exp")!!.asInt
-                        val answer: String? = dbHandler.addRepExp(user!!.idLong, xp)
-                        event.reply("Опыт выдан").setEphemeral(true).queue()
-                        val list: List<Role> = user.roles
-                        when {
-                            answer != null -> {
-                                event.hook
-                                    .sendMessage(user.asMention + " получил новый уровень репутации: \"" + answer + "\"!")
+                    when (roleId) {
+                        role.id -> {
+                            val user = event.getOption("пользователь")!!.asMember
+                            var rankXP: Int = event.getOption("ранг")?.asInt ?: 0
+                            var repXP: Int = event.getOption("репутация")?.asInt ?: 0
+                            val useModificator = event.getOption("модификатор")!!.asBoolean
+                            var modificator = 1.0f
+
+                            if (useModificator) {
+                                modificator = dbHandler.applyModificatr(user!!.idLong)
+                            }
+
+                            rankXP = (rankXP.times(modificator)).toInt()
+                            repXP = (repXP.times(modificator)).toInt()
+
+                            val answerRank: String? = dbHandler.addRankExp(user!!.idLong, rankXP)
+                            val answerRep: String? = dbHandler.addRepExp(user.idLong, repXP)
+                            event.reply("Опыт выдан пользователю ${user.asMention} в количестве: $rankXP Rank XP и $repXP Rep!").queue()
+
+                            val list = user.roles
+                            if (answerRank != null) {
+                                event.hook.sendMessage("${user.asMention} получил новый ранг: \"$answerRank\"!")
+                                    .queue()
+                                for (rl in list) when (rl.name) {
+                                    "Зеленый" -> {
+                                        event.guild!!.removeRoleFromMember(
+                                            user,
+                                            event.guild!!.getRolesByName("Зеленый", true)[0]
+                                        ).queue()
+                                    }
+                                    "Новичек" -> {
+                                        event.guild!!.removeRoleFromMember(
+                                            user,
+                                            event.guild!!.getRolesByName("Новичек", true)[0]
+                                        ).queue()
+                                    }
+                                    "Неопытный" -> {
+                                        event.guild!!.removeRoleFromMember(
+                                            user,
+                                            event.guild!!.getRolesByName("Неопытный", true)[0]
+                                        ).queue()
+                                    }
+                                    "Бывалый" -> {
+                                        event.guild!!.removeRoleFromMember(
+                                            user,
+                                            event.guild!!.getRolesByName("Бывалый", true)[0]
+                                        ).queue()
+                                    }
+                                    "Профессионал" -> {
+                                        event.guild!!.removeRoleFromMember(
+                                            user,
+                                            event.guild!!.getRolesByName("Профессионал", true)[0]
+                                        ).queue()
+                                    }
+                                    "Ветеран" -> {
+                                        event.guild!!.removeRoleFromMember(
+                                            user,
+                                            event.guild!!.getRolesByName("Ветеран", true)[0]
+                                        ).queue()
+                                    }
+                                    "Мастер" -> {
+                                        event.guild!!.removeRoleFromMember(
+                                            user,
+                                            event.guild!!.getRolesByName("Мастер", true)[0]
+                                        ).queue()
+                                    }
+                                    "Элита" -> {
+                                        event.guild!!.removeRoleFromMember(
+                                            user,
+                                            event.guild!!.getRolesByName("Элита", true)[0]
+                                        ).queue()
+                                    }
+                                }
+                                event.guild!!.addRoleToMember(user, event.guild!!.getRolesByName(answerRank, true)[0])
+                                    .queue()
+                            }
+                            if (answerRep != null) {
+                                event.hook.sendMessage("${user.asMention} получил новый уровень репутации: \"$answerRep\"!")
                                     .queue()
                                 for (rl in list) {
                                     when (rl.name) {
@@ -180,88 +244,6 @@ class ExpCommand : Command {
                                         }
                                     }
                                 }
-                                event.guild!!.addRoleToMember(user, event.guild!!.getRolesByName(answer, true)[0])
-                                    .queue()
-                            }
-                        }
-                        res = true
-                        break@mainLoop
-                    }
-                }
-            }
-            if (!res) {
-                event.reply("У вас недостаточно прав")
-            }
-        }
-
-        fun giveRankExp(event: SlashCommandInteractionEvent) {
-            val dbHandler = DBHandler()
-            val roleIds: List<String> = dbHandler.getRoleIds("gm", 1).split(", ")
-            var res = false
-            mainLoop@ for (role in event.member!!.roles) {
-                for (roleId in roleIds) {
-                    when (roleId) {
-                        role.id -> {
-                            val user = event.getOption("пользователь")!!.asMember
-                            val xp: Int = event.getOption("exp")!!.asInt
-                            val answer: String? = dbHandler.addRankExp(user!!.idLong, xp)
-                            event.reply("Опыт выдан").setEphemeral(true).queue()
-                            val list = user!!.roles
-                            if (answer != null) {
-                                event.hook.sendMessage("${user.asMention} получил новый ранг: \"$answer\"!")
-                                    .queue()
-                                for (rl in list) when (rl.name) {
-                                    "Зеленый" -> {
-                                        event.guild!!.removeRoleFromMember(
-                                            user,
-                                            event.guild!!.getRolesByName("Зеленый", true)[0]
-                                        ).queue()
-                                    }
-                                    "Новичек" -> {
-                                        event.guild!!.removeRoleFromMember(
-                                            user,
-                                            event.guild!!.getRolesByName("Новичек", true)[0]
-                                        ).queue()
-                                    }
-                                    "Неопытный" -> {
-                                        event.guild!!.removeRoleFromMember(
-                                            user,
-                                            event.guild!!.getRolesByName("Неопытный", true)[0]
-                                        ).queue()
-                                    }
-                                    "Бывалый" -> {
-                                        event.guild!!.removeRoleFromMember(
-                                            user,
-                                            event.guild!!.getRolesByName("Бывалый", true)[0]
-                                        ).queue()
-                                    }
-                                    "Профессионал" -> {
-                                        event.guild!!.removeRoleFromMember(
-                                            user,
-                                            event.guild!!.getRolesByName("Профессионал", true)[0]
-                                        ).queue()
-                                    }
-                                    "Ветеран" -> {
-                                        event.guild!!.removeRoleFromMember(
-                                            user,
-                                            event.guild!!.getRolesByName("Ветеран", true)[0]
-                                        ).queue()
-                                    }
-                                    "Мастер" -> {
-                                        event.guild!!.removeRoleFromMember(
-                                            user,
-                                            event.guild!!.getRolesByName("Мастер", true)[0]
-                                        ).queue()
-                                    }
-                                    "Элита" -> {
-                                        event.guild!!.removeRoleFromMember(
-                                            user,
-                                            event.guild!!.getRolesByName("Элита", true)[0]
-                                        ).queue()
-                                    }
-                                }
-                                event.guild!!.addRoleToMember(user, event.guild!!.getRolesByName(answer, true)[0])
-                                    .queue()
                             }
                             res = true
                             break@mainLoop
