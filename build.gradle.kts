@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "com.ghwu"
-version = "0.1.0-dev.47"
+version = "0.1.0-dev.50"
 
 repositories {
     mavenCentral()

@@ -41,6 +41,26 @@ class DBHandler {
         return dataSource.connection
     }
 
+    fun getIsKitUsedStatus(userId: Long): Boolean {
+        val sql = "SELECT is_kit_used FROM users WHERE userid=?"
+        getConnection().prepareStatement(sql).also {
+            it.setLong(1, userId)
+            it.executeQuery().also { rs ->
+                rs.next()
+                return rs.getBoolean(1)
+            }
+        }
+    }
+
+    fun changeIsKitUsedStatusTo(userId: Long, status: Boolean) {
+        val sql = "UPDATE users SET is_kit_used=? WHERE userid=?"
+        getConnection().prepareStatement(sql).also {
+            it.setBoolean(1, status)
+            it.setLong(2, userId)
+            it.executeUpdate()
+        }
+    }
+
     fun applyModificatr(userId: Long): Float {
         var sql = "SELECT * FROM JSON_TABLE((SELECT active_xp_modifiers FROM users WHERE userid=?), '$**[*]' COLUMNS(modifier double path '$')) AS jt"
         val list = mutableListOf<Float>()

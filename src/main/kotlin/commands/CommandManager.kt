@@ -31,10 +31,12 @@ class CommandManager : ListenerAdapter() {
         commands["режим"] = ModeCommand()
         commands["баланс"] = BalanceCommand()
         commands["бонус"] = BonusCommand()
+        commands["кит"] = KitCommand()
 
         val guildCommandList: MutableList<CommandData> = ArrayList()
 
         guildCommandList.add(createClearCommand())
+        guildCommandList.add(createKitCommand())
         guildCommandList.add(createMuteCommand())
         guildCommandList.add(createUnmuteCommand())
         guildCommandList.add(createTimeCommand())
@@ -51,6 +53,10 @@ class CommandManager : ListenerAdapter() {
         guildCommandList.add(createModeCommand())
         guildCommandList.add(createBalanceCommand())
         event.guild.updateCommands().addCommands(guildCommandList).queue()
+    }
+
+    private fun createKitCommand(): SlashCommandData {
+        return Commands.slash("кит", "Забрать стартовые предметы")
     }
 
     private fun createBonusCommand(): SlashCommandData {

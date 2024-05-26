@@ -30,7 +30,7 @@ class ConsumableGiveHandler {
         }
 
         private fun giveConsumable(userId: Long, name: String) {
-            val sql = "UPDATE users SET consumables=(JSON_ARRAY_APPEND(weapons, '$', ?)) WHERE userid=?"
+            val sql = "UPDATE users SET consumables=(JSON_ARRAY_APPEND(consumables, '$', ?)) WHERE userid=?"
 
             dbHandler.getConnection().prepareStatement(sql).also {
                 it.setString(1, name)
