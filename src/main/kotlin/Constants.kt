@@ -31,7 +31,8 @@ val RU_LOCALE_MAP = mapOf(
     "food" to "Питательность",
     "thirst" to "Утоление жажды",
     "description" to "Описание",
-    "type" to "Тип"
+    "type" to "Тип",
+    "amount" to "Количество"
 )
 const val DB_HOST = "localhost"
 const val DB_PORT = 3306

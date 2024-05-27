@@ -30,6 +30,12 @@ class ItemCommand : Command {
             "удалить_расходник" -> {
                 deleteConsumable(event)
             }
+            "добавить_патроны" -> {
+                createAmmo(event)
+            }
+            "удалить_патроны" -> {
+                deleteAmmo(event)
+            }
             "все" -> {
                 getAllItems(event)
             }
@@ -40,6 +46,49 @@ class ItemCommand : Command {
     }
 
     companion object {
+        fun createAmmo(event: SlashCommandInteractionEvent) {
+            val dbHandler = DBHandler()
+            val roleIds: List<String> = dbHandler.getRoleIds("admin", 1).split(", ")
+            var res = false
+            mainLoop@ for (role in event.member!!.roles) {
+                for (roleId in roleIds) {
+                    if (role.id == roleId) {
+                        val name: String = event.getOption("название_предмета")!!.asString
+                        val price: Int = event.getOption("цена")!!.asInt
+                        val amount: Int = event.getOption("количество")!!.asInt
+
+                        dbHandler.addAmmo(name, price, amount)
+                        event.reply("Предмет добавлен").queue()
+                        res = true
+                        break@mainLoop
+                    }
+                }
+            }
+            if (!res) {
+                event.reply("У вас недостаточно прав").queue()
+            }
+        }
+
+        fun deleteAmmo(event: SlashCommandInteractionEvent) {
+            val dbHandler = DBHandler()
+            val roleIds: List<String> = dbHandler.getRoleIds("admin", 1).split(", ")
+            var res = false
+            mainLoop@ for (role in event.member!!.roles) {
+                for (roleId in roleIds) {
+                    if (role.id == roleId) {
+                        val id: Int = event.getOption("айди_предмета")!!.asInt
+                        dbHandler.removeAmmo(id)
+                        event.reply("Предмет удален, айди: $id").queue()
+                        res = true
+                        break@mainLoop
+                    }
+                }
+            }
+            if (!res) {
+                event.reply("У вас недостаточно прав").queue()
+            }
+        }
+
         fun getAllItems(event: SlashCommandInteractionEvent) {
             val dbHandler = DBHandler()
             val type: String = event.getOption("тип")!!.asString
@@ -51,8 +100,11 @@ class ItemCommand : Command {
                 "оружие" -> {
                     title = "оружия"
                 }
-                "провизия" -> {
-                    title = "провизии"
+                "расходник" -> {
+                    title = "расходников"
+                }
+                "патроны" -> {
+                    title = "патронов"
                 }
             }
             val arr: Collection<String> = dbHandler.getAllItems(type)
@@ -71,9 +123,16 @@ class ItemCommand : Command {
             } else {
                 val eb = EmbedBuilder()
                 val descSB = StringBuilder()
-                for (i in 0..9) {
-                    val ez = arr.toTypedArray()[i]
-                    descSB.append("**" + ez + " (ID: " + dbHandler.getItemId(type, ez) + ")**\n")
+                if (arr.size < 10) {
+                    for (i in 0..<arr.size) {
+                        val ez = arr.toTypedArray()[i]
+                        descSB.append("**" + ez + " (ID: " + dbHandler.getItemId(type, ez) + ")**\n")
+                    }
+                } else {
+                    for (i in 0..9) {
+                        val ez = arr.toTypedArray()[i]
+                        descSB.append("**" + ez + " (ID: " + dbHandler.getItemId(type, ez) + ")**\n")
+                    }
                 }
                 val descStr = descSB.toString()
                 val closeList = Button.danger("close-list", "X")

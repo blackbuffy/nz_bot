@@ -13,13 +13,13 @@ class ConsumableTakeHandler {
                 it.setLong(2, userId)
                 it.executeQuery().also { rs ->
                     rs.next()
-                    return rs.getString(1)?: "null"
+                    return rs.getString(1)?.substring(1..rs.getString(1).length - 2)?: "null"
                 }
             }
         }
 
         private fun takeConsumable(index: String, userId: Long) {
-            val sql = "UPDATE users SET consumables = JSON_REMOVE(consumables, CONCAT(?)) WHERE userid=?"
+            val sql = "UPDATE users SET consumables = JSON_REMOVE(consumables, ?) WHERE userid=?"
 
             dbHandler.getConnection().prepareStatement(sql).also {
                 it.setString(1, index)

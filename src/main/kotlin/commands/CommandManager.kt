@@ -362,7 +362,19 @@ class CommandManager : ListenerAdapter() {
         val itemRemoveArmorSCOptions = arrayOf(
             OptionData(OptionType.INTEGER, "айди_предмета", "Айди предмета", true)
         )
+        val itemAddAmmoSCOptions = arrayOf(
+            OptionData(OptionType.STRING, "название_предмета", "Название предмета", true),
+            OptionData(OptionType.INTEGER, "цена", "Цена предмета", true),
+            OptionData(OptionType.INTEGER, "количество", "Количество в одной пачке", true),
+        )
+        val itemRemoveAmmoSCOptions = arrayOf(
+            OptionData(OptionType.INTEGER, "айди_предмета", "Айди предмета", true)
+        )
         val itemSubcommands = arrayOf(
+            SubcommandData("добавить_патроны", "Создать патроны")
+                .addOptions(*itemAddAmmoSCOptions),
+            SubcommandData("удалить_патроны", "Удалить патроны")
+                .addOptions(*itemRemoveAmmoSCOptions),
             SubcommandData("добавить_броню", "Создать броню")
                 .addOptions(*itemAddArmorSCOptions),
             SubcommandData("удалить_броню", "Удалить броню")
@@ -385,6 +397,14 @@ class CommandManager : ListenerAdapter() {
     }
 
     private fun createInventoryCommand(): SlashCommandData {
+        val invGiveAmmoSCOptions = arrayOf(
+            OptionData(OptionType.USER, "пользователь", "Пользователь которому нужно выдать предмет", true),
+            OptionData(OptionType.STRING, "название_предмета", "Название предмета которого нужно выдать", true)
+        )
+        val invTakeAmmoSCOptions = arrayOf(
+            OptionData(OptionType.USER, "пользователь", "Пользователь у которого нужно забрать предмет", true),
+            OptionData(OptionType.STRING, "название_предмета", "Название предмета которого нужно выдать", true)
+        )
         val invGiveArmorSCOptions = arrayOf(
             OptionData(OptionType.USER, "пользователь", "Пользователь которому нужно выдать предмет", true),
             OptionData(OptionType.STRING, "название_предмета", "Название предмета которого нужно выдать", true)
@@ -413,6 +433,10 @@ class CommandManager : ListenerAdapter() {
             OptionData(OptionType.STRING, "название", "Название предмета которого нужно забрать", true)
         )
         val invSubcommands = arrayOf(
+            SubcommandData("выдать_патроны", "Выдать патроны участнику")
+                .addOptions(*invGiveAmmoSCOptions),
+            SubcommandData("забрать_патроны", "Забрать патроны у участника")
+                .addOptions(*invTakeAmmoSCOptions),
             SubcommandData("выдать_броню", "Выдать броню участнику")
                 .addOptions(*invGiveArmorSCOptions),
             SubcommandData("забрать_броню", "Забрать броню у участника")
@@ -423,9 +447,9 @@ class CommandManager : ListenerAdapter() {
                 .addOptions(*invGiveWeaponSCOptions),
             SubcommandData("забрать_оружие", "Забрать оружие у участника")
                 .addOptions(*invTakeWeaponSCOptions),
-            SubcommandData("выдать_провизию", "Выдать съедобный предмет участнику")
+            SubcommandData("выдать_расходник", "Выдать съедобный предмет участнику")
                 .addOptions(*invGiveConsumableSCOptions),
-            SubcommandData("забрать_провизию", "Забрать съедобный предмет у участника")
+            SubcommandData("забрать_расходник", "Забрать съедобный предмет у участника")
                 .addOptions(*invTakeConsumableSCOptions)
         )
         return Commands.slash("инвентарь", "Команды связанные с инвентарем")

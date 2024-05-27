@@ -12,6 +12,12 @@ import java.awt.Color
 class InventoryCommand : Command {
     override fun execute(event: SlashCommandInteractionEvent) {
         when (event.subcommandName) {
+            "выдать_патроны" -> {
+                giveAmmo(event)
+            }
+            "забрать_патроны" -> {
+                takeAmmo(event)
+            }
             "выдать_броню" -> {
                 giveArmor(event)
             }
@@ -27,10 +33,10 @@ class InventoryCommand : Command {
             "забрать_оружие" -> {
                 takeWeapon(event)
             }
-            "выдать_провизию" -> {
+            "выдать_расходник" -> {
                 giveConsumable(event)
             }
-            "забрать_провизию" -> {
+            "забрать_расходник" -> {
                 takeConsumable(event)
             }
         }
@@ -61,21 +67,75 @@ class InventoryCommand : Command {
                 sb.append(consumable + "\n")
             }
             val consumablesFieldStr: String = if (sb.toString() == "\n") "Пусто" else sb.toString()
+            sb = StringBuilder()
+            val ammoList: Array<String> = dbHandler.getUserAmmo(userid)
+            for (ammo in ammoList) {
+                sb.append(ammo + "\n")
+            }
+            val ammoFieldStr: String = if (sb.toString() == "\n") "Пусто" else sb.toString()
             val eb = EmbedBuilder()
             val emsgArmorField: MessageEmbed.Field = MessageEmbed.Field("Броня:", armorFieldStr, true)
             val emsgWeaponField: MessageEmbed.Field = MessageEmbed.Field("Оружие:", weaponFieldStr, true)
-            val emsgConsumablesField: MessageEmbed.Field = MessageEmbed.Field("Провизия:", consumablesFieldStr, true)
+            val emsgConsumablesField: MessageEmbed.Field = MessageEmbed.Field("Расходники:", consumablesFieldStr, true)
+            val emsgAmmoField: MessageEmbed.Field = MessageEmbed.Field("Патроны:", ammoFieldStr, true)
             val emsg: MessageEmbed = eb
                 .setColor(Color(18, 125, 181))
                 .setTitle("Инвентарь " + user.globalName)
                 .addField(emsgArmorField)
                 .addField(emsgWeaponField)
                 .addField(emsgConsumablesField)
+                .addField(emsgAmmoField)
                 .build()
             val msg: MessageCreateData = MessageCreateBuilder()
                 .addEmbeds(emsg)
                 .build()
             event.reply(msg).queue()
+        }
+
+        fun giveAmmo(event: SlashCommandInteractionEvent) {
+            val dbHandler = DBHandler()
+            val roleIds: List<String> = dbHandler.getRoleIds("gm", 1).split(", ")
+            var result = false
+            mainLoop@ for (role in event.member!!.roles) {
+                for (roleId in roleIds) {
+                    if (role.id == roleId) {
+                        val user: User = event.getOption("пользователь")!!.asUser
+                        val name: String = event.getOption("название_предмета")!!.asString
+                        val userid = user.idLong
+                        val res: Boolean = dbHandler.giveAmmo(userid, name)
+                        event.reply(if (res) "Предмет " + name + " выдан пользователю " + user.globalName + " успешно!" else "Предмета $name не существует в базе данных.")
+                            .queue()
+                        result = true
+                        break@mainLoop
+                    }
+                }
+            }
+            if (!result) {
+                event.reply("У вас недостаточно прав").queue()
+            }
+        }
+
+        fun takeAmmo(event: SlashCommandInteractionEvent) {
+            val dbHandler = DBHandler()
+            val roleIds: List<String> = dbHandler.getRoleIds("gm", 1).split(", ")
+            var result = false
+            mainLoop@ for (role in event.member!!.roles) {
+                for (roleId in roleIds) {
+                    if (role.id == roleId) {
+                        val user: User = event.getOption("пользователь")!!.asUser
+                        val name: String = event.getOption("название_предмета")!!.asString
+                        val userid = user.idLong
+                        val res: Boolean = dbHandler.takeAmmo(name, userid)
+                        event.reply(if (res) "Предмет " + name + " у пользователя " + user.asMention + " удален успешно!" else "У пользователя " + user.asMention + " нет данного предмета.")
+                            .queue()
+                        result = true
+                        break@mainLoop
+                    }
+                }
+            }
+            if (!result) {
+                event.reply("У вас недостаточно прав").queue()
+            }
         }
 
         fun giveArmor(event: SlashCommandInteractionEvent) {

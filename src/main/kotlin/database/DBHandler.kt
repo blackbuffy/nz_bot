@@ -7,6 +7,7 @@ import DB_PORT
 import DB_USER
 import RUBLE_SYMBOL
 import RU_LOCALE_MAP
+import database.handlers.ammo.*
 import database.handlers.armor.*
 import database.handlers.consumables.*
 import database.handlers.weapons.*
@@ -39,6 +40,30 @@ class DBHandler {
 
     internal fun getConnection(): Connection {
         return dataSource.connection
+    }
+
+    fun takeAmmo(name: String, userId: Long): Boolean {
+        return AmmoTakeHandler.takeAmmo(name, userId)
+    }
+
+    fun removeAmmo(id: Int) {
+        AmmoRemovalHandler.handleAmmoItemRemoval(id)
+    }
+
+    fun getUserAmmo(userId: Long): Array<String> {
+        return AmmoListReturnHandler.returnList(userId)
+    }
+
+    fun giveAmmo(userId: Long, name: String): Boolean {
+        return AmmoGiveHandler.giveAmmo(name, userId)
+    }
+
+    fun addAmmo(
+        name: String,
+        price: Int,
+        amount: Int
+    ) {
+        AmmoAdditionHandler.handleAmmoItemAddition(name, price, amount)
     }
 
     fun getIsKitUsedStatus(userId: Long): Boolean {
@@ -273,8 +298,11 @@ class DBHandler {
             "оружие" -> {
                 "SELECT name FROM weapons"
             }
-            "провизия" -> {
+            "расходник" -> {
                 "SELECT name FROM consumables"
+            }
+            "патроны" -> {
+                "SELECT name FROM ammo"
             }
             else -> {
                 null
@@ -313,8 +341,11 @@ class DBHandler {
             "оружие" -> {
                 "SELECT weaponid FROM weapons WHERE name=?"
             }
-            "провизия" -> {
+            "расходник" -> {
                 "SELECT conid FROM consumables WHERE name=?"
+            }
+            "патроны" -> {
+                "SELECT id FROM ammo WHERE name=?"
             }
             else -> {
                 null
@@ -348,7 +379,9 @@ class DBHandler {
             "оружие" to Pair("SELECT * FROM weapons WHERE weaponid=?",
                 listOf("name", "fire_rate", "accuracy", "range", "flatness", "recoil", "ammo", "weight", "ammo_type", "price", "rank", "type")),
             "расходник" to Pair("SELECT * FROM consumables WHERE conid=?",
-                listOf("name", "rad", "psi", "bio", "food", "thirst", "description"))
+                listOf("name", "rad", "psi", "bio", "food", "thirst", "description")),
+            "патроны" to Pair("SELECT * FROM ammo WHERE id=?",
+                listOf("name", "price", "amount"))
         )
 
         // Получение типа предмета

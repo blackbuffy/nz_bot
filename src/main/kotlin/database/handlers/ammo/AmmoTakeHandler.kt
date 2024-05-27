@@ -1,15 +1,15 @@
-package database.handlers.armor
+package database.handlers.ammo
 
 import database.DBHandler
 
-class ArmorTakeHandler {
+class AmmoTakeHandler {
     companion object {
         private val dbHandler = DBHandler()
 
-        private fun isIndexExist(armorName: String, userId: Long): String {
-            val sql = "SELECT JSON_SEARCH(armor, 'one', ?) AS index_found FROM users WHERE userid=?"
+        private fun isIndexExist(name: String, userId: Long): String {
+            val sql = "SELECT JSON_SEARCH(ammo, 'one', ?) AS index_found FROM users WHERE userid=?"
             dbHandler.getConnection().prepareStatement(sql).also {
-                it.setString(1, armorName)
+                it.setString(1, name)
                 it.setLong(2, userId)
                 it.executeQuery().also { rs ->
                     rs.next()
@@ -18,9 +18,9 @@ class ArmorTakeHandler {
             }
         }
 
-        fun takeArmor(armorName: String, userId: Long): Boolean {
-            val sql = "UPDATE users SET armor = JSON_REMOVE(armor, ?) WHERE userid=?"
-            when(val xyz = isIndexExist(armorName, userId)) {
+        fun takeAmmo(name: String, userId: Long): Boolean {
+            val sql = "UPDATE users SET ammo = JSON_REMOVE(ammo, ?) WHERE userid=?"
+            when(val xyz = isIndexExist(name, userId)) {
                 "null" -> {
                     return false
                 }
